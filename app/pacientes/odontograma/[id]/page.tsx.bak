@@ -1,0 +1,240 @@
+"use client"
+
+import { Button } from "@/components/ui/button"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { Textarea } from "@/components/ui/textarea"
+import { Tooth } from "@/components/tooth"
+import { useEffect, useState } from "react"
+
+interface Treatment {
+  id: string
+  tooth_number: number
+  tooth_zone: string
+  treatment_type: string
+  treatment_date: string
+  details: string
+  status: string
+}
+
+const treatmentsMock: Treatment[] = [
+  {
+    id: "1",
+    tooth_number: 1,
+    tooth_zone: "superior_right",
+    treatment_type: "cleaning",
+    treatment_date: "2024-01-01",
+    details: "cleaning details",
+    status: "completed",
+  },
+  {
+    id: "2",
+    tooth_number: 2,
+    tooth_zone: "superior_right",
+    treatment_type: "filling",
+    treatment_date: "2024-01-02",
+    details: "filling details",
+    status: "pending",
+  },
+  {
+    id: "3",
+    tooth_number: 3,
+    tooth_zone: "superior_right",
+    treatment_type: "extraction",
+    treatment_date: "2024-01-03",
+    details: "extraction details",
+    status: "canceled",
+  },
+]
+
+export default function Odontograma({ params }: { params: { id: string } }) {
+  const patientId = params.id
+
+  const [selectedTooth, setSelectedTooth] = useState<number | null>(null)
+  // Actualizar los estados iniciales
+  const [selectedZone, setSelectedZone] = useState("")
+  const [selectedTreatmentType, setSelectedTreatmentType] = useState("")
+  const [treatmentDate, setTreatmentDate] = useState("")
+  const [treatmentDetails, setTreatmentDetails] = useState("")
+  const [selectedStatus, setSelectedStatus] = useState("healthy")
+
+  const [treatments, setTreatments] = useState<Treatment[]>([])
+
+  useEffect(() => {
+    // TODO: Fetch treatments from API
+    setTreatments(treatmentsMock)
+  }, [])
+
+  const handleToothClick = (toothNumber: number) => {
+    setSelectedTooth(toothNumber)
+  }
+
+  const handleZoneChange = (zone: string) => {
+    setSelectedZone(zone)
+  }
+
+  const handleTreatmentTypeChange = (treatmentType: string) => {
+    setSelectedTreatmentType(treatmentType)
+  }
+
+  const handleDateChange = (date: string) => {
+    setTreatmentDate(date)
+  }
+
+  const handleDetailsChange = (details: string) => {
+    setTreatmentDetails(details)
+  }
+
+  const handleStatusChange = (status: string) => {
+    setSelectedStatus(status)
+  }
+
+  const handleSaveTreatment = () => {
+    // TODO: Save treatment to API
+    console.log("Saving treatment", {
+      toothNumber: selectedTooth,
+      toothZone: selectedZone,
+      treatmentType: selectedTreatmentType,
+      treatmentDate: treatmentDate,
+      details: treatmentDetails,
+      status: selectedStatus,
+    })
+  }
+
+  const handleDeleteTreatment = (treatmentId: string) => {
+    // TODO: Delete treatment from API
+    console.log("Deleting treatment", treatmentId)
+  }
+
+  const handleEditTreatment = (treatment: Treatment) => {
+    setSelectedTooth(treatment.tooth_number)
+    setSelectedZone(treatment.tooth_zone || "")
+    setSelectedTreatmentType(treatment.treatment_type || "")
+    setTreatmentDate(treatment.treatment_date ? new Date(treatment.treatment_date).toISOString().split("T")[0] : "")
+    setTreatmentDetails(treatment.details || "")
+    setSelectedStatus(treatment.status || "healthy")
+  }
+
+  return (
+    <div className="flex flex-col md:flex-row gap-4">
+      <Card className="w-full md:w-1/2">
+        <CardHeader>
+          <CardTitle>Odontograma</CardTitle>
+          <CardDescription>Visualización del odontograma del paciente.</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <div className="grid grid-cols-8 gap-2">
+            {[...Array(32)].map((_, i) => {
+              const toothNumber = i + 1
+              const treatment = treatments.find((t) => t.tooth_number === toothNumber)
+              let status = "healthy"
+              if (treatment) {
+                status = treatment.status
+              }
+
+              return <Tooth key={toothNumber} toothNumber={toothNumber} status={status} onClick={handleToothClick} />
+            })}
+          </div>
+        </CardContent>
+      </Card>
+
+      <Card className="w-full md:w-1/2">
+        <CardHeader>
+          <CardTitle>Detalles del Tratamiento</CardTitle>
+          <CardDescription>Información detallada del tratamiento seleccionado.</CardDescription>
+        </CardHeader>
+        <CardContent className="grid gap-4">
+          <div className="grid gap-2">
+            <Label htmlFor="tooth">Diente</Label>
+            <Input type="number" id="tooth" value={selectedTooth || ""} disabled />
+          </div>
+          <div className="grid gap-2">
+            <Label htmlFor="zone">Zona</Label>
+            <Select value={selectedZone} onValueChange={setSelectedZone}>
+              <SelectTrigger id="zone">
+                <SelectValue placeholder="Seleccione zona" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="vestibular">Vestibular</SelectItem>
+                <SelectItem value="palatino">Palatino/Lingual</SelectItem>
+                <SelectItem value="mesial">Mesial</SelectItem>
+                <SelectItem value="distal">Distal</SelectItem>
+                <SelectItem value="oclusal">Oclusal</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+          <div className="grid gap-2">
+            <Label htmlFor="treatment">Tratamiento</Label>
+            <Select value={selectedTreatmentType || ""} onValueChange={setSelectedTreatmentType}>
+              <SelectTrigger id="treatment">
+                <SelectValue placeholder="Selecciona un tratamiento" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="cleaning">Limpieza</SelectItem>
+                <SelectItem value="filling">Empaste</SelectItem>
+                <SelectItem value="extraction">Extracción</SelectItem>
+                <SelectItem value="other">Otro</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+          <div className="grid gap-2">
+            <Label htmlFor="date">Fecha</Label>
+            <Input type="date" value={treatmentDate} onChange={(e) => setTreatmentDate(e.target.value)} />
+          </div>
+          <div className="grid gap-2">
+            <Label htmlFor="details">Detalles</Label>
+            <Textarea
+              value={treatmentDetails}
+              onChange={(e) => setTreatmentDetails(e.target.value)}
+              placeholder="Describa el tratamiento realizado..."
+            />
+          </div>
+          <div className="grid gap-2">
+            <Label htmlFor="status">Estado</Label>
+            <Select value={selectedStatus || "healthy"} onValueChange={handleStatusChange}>
+              <SelectTrigger id="status">
+                <SelectValue placeholder="Selecciona un estado" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="healthy">Sano</SelectItem>
+                <SelectItem value="completed">Completado</SelectItem>
+                <SelectItem value="pending">Pendiente</SelectItem>
+                <SelectItem value="canceled">Cancelado</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+          <Button onClick={handleSaveTreatment}>Guardar Tratamiento</Button>
+        </CardContent>
+      </Card>
+
+      <Card className="w-full">
+        <CardHeader>
+          <CardTitle>Historial de Tratamientos</CardTitle>
+          <CardDescription>Historial de tratamientos del paciente.</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <ul>
+            {treatments.map((treatment) => (
+              <li key={treatment.id} className="flex justify-between items-center py-2 border-b">
+                <div>
+                  Diente {treatment.tooth_number} - {treatment.treatment_type} - {treatment.treatment_date} -{" "}
+                  {treatment.status}
+                </div>
+                <div>
+                  <Button size="sm" variant="secondary" onClick={() => handleEditTreatment(treatment)}>
+                    Editar
+                  </Button>
+                  <Button size="sm" variant="destructive" onClick={() => handleDeleteTreatment(treatment.id)}>
+                    Eliminar
+                  </Button>
+                </div>
+              </li>
+            ))}
+          </ul>
+        </CardContent>
+      </Card>
+    </div>
+  )
+}
