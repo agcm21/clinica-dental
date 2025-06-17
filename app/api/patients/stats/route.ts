@@ -1,97 +1,94 @@
 import { NextResponse } from "next/server"
-import { getSupabaseClient } from "@/lib/supabase"
+import { supabase } from "@/lib/supabase"
 
 export async function GET() {
   try {
-    const supabase = getSupabaseClient()
+    // Obtener estadísticas de pacientes
+    const { data: patients, error: patientsError } = await supabase.from("patients").select("*")
 
-    // Obtener el total de pacientes
-    const { count: totalPatients, error: countError } = await supabase
-      .from("patients")
-      .select("*", { count: "exact", head: true })
-
-    if (countError) {
-      console.error("Error contando pacientes:", countError)
-      return NextResponse.json({ error: countError.message }, { status: 500 })
+    if (patientsError) {
+      return NextResponse.json({ error: patientsError.message }, { status: 500 })
     }
 
-    // Obtener pacientes del año actual
-    const currentYear = new Date().getFullYear()
-    const startOfYear = new Date(currentYear, 0, 1).toISOString()
+    // Obtener estadísticas de tratamientos
+    const { data: treatments, error: treatmentsError } = await supabase.from("dental_treatments").select("*")
 
-    const { count: currentYearPatients, error: yearError } = await supabase
-      .from("patients")
-      .select("*", { count: "exact", head: true })
-      .gte("created_at", startOfYear)
-
-    if (yearError) {
-      console.error("Error contando pacientes del año actual:", yearError)
-      return NextResponse.json({ error: yearError.message }, { status: 500 })
+    if (treatmentsError) {
+      return NextResponse.json({ error: treatmentsError.message }, { status: 500 })
     }
 
-    // Obtener pacientes de los últimos 3 meses con desglose por mes
-    const monthNames = [
-      "Enero",
-      "Febrero",
-      "Marzo",
-      "Abril",
-      "Mayo",
-      "Junio",
-      "Julio",
-      "Agosto",
-      "Septiembre",
-      "Octubre",
-      "Noviembre",
-      "Diciembre",
-    ]
-    const today = new Date()
-    const monthlyBreakdown = {}
-    let last3MonthsPatients = 0
+    // Obtener estadísticas de citas
+    const { data: appointments, error: appointmentsError } = await supabase.from("appointments").select("*")
 
-    // Procesar los últimos 3 meses
-    for (let i = 0; i < 3; i++) {
-      const month = new Date(today.getFullYear(), today.getMonth() - i, 1)
-      const monthEnd = new Date(today.getFullYear(), today.getMonth() - i + 1, 0)
+    if (appointmentsError) {
+      return NextResponse.json({ error: appointmentsError.message }, { status: 500 })
+    }
 
-      const monthName = monthNames[month.getMonth()]
-      const startDate = month.toISOString()
-      const endDate = monthEnd.toISOString()
+    // Calcular estadísticas
+    const totalPatients = patients?.length || 0
+    const totalTreatments = treatments?.length || 0
+    const totalAppointments = appointments?.length || 0
 
-      console.log(`Consultando pacientes para ${monthName}: ${startDate} a ${endDate}`)
+    // Estadísticas por mes (últimos 6 meses)
+    const monthlyStats: { [key: string]: number } = {}
+    const currentDate = new Date()
 
-      const { count: monthCount, error: monthError } = await supabase
-        .from("patients")
-        .select("*", { count: "exact", head: true })
-        .gte("created_at", startDate)
-        .lte("created_at", endDate)
+    // Inicializar los últimos 6 meses
+    for (let i = 5; i >= 0; i--) {
+      const date = new Date(currentDate.getFullYear(), currentDate.getMonth() - i, 1)
+      const monthKey = date.toISOString().slice(0, 7) // YYYY-MM format
+      monthlyStats[monthKey] = 0
+    }
 
-      if (monthError) {
-        console.error(`Error contando pacientes de ${monthName}:`, monthError)
-        monthlyBreakdown[monthName] = 0
-      } else {
-        console.log(`Pacientes en ${monthName}: ${monthCount}`)
-        monthlyBreakdown[monthName] = monthCount || 0
-        last3MonthsPatients += monthCount || 0
+    // Contar pacientes por mes
+    patients?.forEach((patient: any) => {
+      if (patient.created_at) {
+        const monthKey = patient.created_at.slice(0, 7) // YYYY-MM format
+        if (monthKey in monthlyStats) {
+          monthlyStats[monthKey]++
+        }
       }
+    })
+
+    // Estadísticas de tratamientos por estado
+    const treatmentStats: { [key: string]: number } = {
+      completed: 0,
+      "in-treatment": 0,
+      pending: 0,
+      healthy: 0,
     }
 
-    // Calcular el porcentaje de crecimiento (últimos 3 meses vs total)
-    const percentageGrowth = totalPatients > 0 ? Math.round((last3MonthsPatients / totalPatients) * 100) : 0
+    treatments?.forEach((treatment: any) => {
+      const status = treatment.status || "healthy"
+      if (status in treatmentStats) {
+        treatmentStats[status]++
+      }
+    })
 
-    const responseData = {
-      totalPatients: totalPatients || 0,
-      currentYearPatients: currentYearPatients || 0,
-      last3MonthsPatients: last3MonthsPatients || 0,
-      monthlyBreakdown,
-      percentageGrowth: `+${percentageGrowth}%`,
+    // Citas por estado
+    const appointmentStats: { [key: string]: number } = {
+      scheduled: 0,
+      completed: 0,
+      cancelled: 0,
     }
 
-    console.log("Datos de respuesta:", responseData)
+    appointments?.forEach((appointment: any) => {
+      const status = appointment.status || "scheduled"
+      if (status in appointmentStats) {
+        appointmentStats[status]++
+      }
+    })
 
-    return NextResponse.json(responseData)
+    return NextResponse.json({
+      totalPatients,
+      totalTreatments,
+      totalAppointments,
+      monthlyPatients: monthlyStats,
+      treatmentsByStatus: treatmentStats,
+      appointmentsByStatus: appointmentStats,
+    })
   } catch (error) {
-    console.error("Error inesperado en stats de pacientes:", error)
+    console.error("Error getting patient stats:", error)
     return NextResponse.json({ error: "Error interno del servidor" }, { status: 500 })
   }
 }
-
