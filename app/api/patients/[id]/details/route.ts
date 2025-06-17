@@ -62,8 +62,8 @@ export async function GET(request: Request, { params }: { params: { id: string }
     // Calcular información financiera
     let financial = null
     if (invoices && invoices.length > 0) {
-      const total = invoices.reduce((sum, invoice) => sum + invoice.total_amount, 0)
-      const paid = invoices.reduce((sum, invoice) => sum + invoice.paid_amount, 0)
+      const total = invoices.reduce((sum: number, invoice: any) => sum + invoice.total_amount, 0)
+      const paid = invoices.reduce((sum: number, invoice: any) => sum + invoice.paid_amount, 0)
       const pending = total - paid
 
       financial = {
@@ -83,7 +83,7 @@ export async function GET(request: Request, { params }: { params: { id: string }
 
     // Formatear los tratamientos recientes
     const recentTreatments =
-      treatments?.map((treatment) => ({
+      treatments?.map((treatment: any) => ({
         id: treatment.id,
         date: new Date(treatment.created_at).toLocaleDateString("es-ES", {
           day: "numeric",
@@ -117,7 +117,7 @@ export async function GET(request: Request, { params }: { params: { id: string }
 
     // Formatear los documentos
     const formattedDocuments =
-      documents?.map((doc) => ({
+      documents?.map((doc: any) => ({
         id: doc.id,
         name: doc.name,
         url: doc.url,

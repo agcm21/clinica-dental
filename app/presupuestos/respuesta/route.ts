@@ -1,31 +1,40 @@
-import { createClient } from "@/lib/supabase/server"
-import { cookies } from "next/headers"
 import { NextResponse } from "next/server"
+import { supabase } from "@/lib/supabase"
 
 export async function POST(request: Request) {
   try {
-    const cookieStore = cookies()
-    const supabase = createClient(cookieStore)
-    const { presupuestoId, respuesta } = await request.json()
+    const { presupuesto_id, respuestas } = await request.json()
 
-    if (!presupuestoId || !respuesta) {
-      return NextResponse.json({ error: "Se requiere ID de presupuesto y respuesta" }, { status: 400 })
+    if (!presupuesto_id || !respuestas) {
+      return NextResponse.json({ message: "Missing presupuesto_id or respuestas" }, { status: 400 })
     }
 
-    const { data, error } = await supabase
-      .from("presupuestos")
-      .update({ respuesta_cliente: respuesta })
-      .eq("id", presupuestoId)
-      .select()
-
-    if (error) {
-      console.error("Error al actualizar respuesta:", error)
-      return NextResponse.json({ error: "Error al actualizar la respuesta" }, { status: 500 })
+    // Validate respuestas (optional, but recommended)
+    if (!Array.isArray(respuestas)) {
+      return NextResponse.json({ message: "Respuestas must be an array" }, { status: 400 })
     }
 
-    return NextResponse.json({ success: true, data })
+    // Insert each respuesta into the database
+    for (const respuesta of respuestas) {
+      const { pregunta_id, valor } = respuesta
+
+      if (!pregunta_id || valor === undefined) {
+        return NextResponse.json({ message: "Missing pregunta_id or valor in respuesta" }, { status: 400 })
+      }
+
+      const { data, error } = await supabase
+        .from("respuestas_presupuestos")
+        .insert([{ presupuesto_id, pregunta_id, valor }])
+
+      if (error) {
+        console.error("Error inserting respuesta:", error)
+        return NextResponse.json({ message: "Failed to insert respuesta", error: error.message }, { status: 500 })
+      }
+    }
+
+    return NextResponse.json({ message: "Respuestas submitted successfully" }, { status: 200 })
   } catch (error) {
-    console.error("Error en la API:", error)
-    return NextResponse.json({ error: "Error interno del servidor" }, { status: 500 })
+    console.error("Error processing request:", error)
+    return NextResponse.json({ message: "Internal server error", error: (error as any).message }, { status: 500 })
   }
 }

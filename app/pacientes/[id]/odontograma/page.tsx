@@ -1,7 +1,7 @@
 "use client"
 
 // Importar React explícitamente para poder usar React.use()
-import React from "react"
+import type React from "react"
 import { useState, useEffect, useRef } from "react"
 import Link from "next/link"
 import { ArrowLeft, Calendar, ImageIcon, Upload, X, User, Pencil, Trash2 } from "lucide-react"
@@ -46,9 +46,8 @@ interface Treatment {
 }
 
 export default function OdontogramaPage({ params }: { params: { id: string } }) {
-  // CAMBIO 1: Desenvolver params usando React.use()
-  const unwrappedParams = React.use(params as any)
-  const patientId = unwrappedParams.id
+  // ✅ CORRECCIÓN: Acceso directo a params.id
+  const patientId = params.id
 
   const [selectedTooth, setSelectedTooth] = useState<number | null>(null)
   const [selectedStatus, setSelectedStatus] = useState<string>("healthy")
@@ -1051,7 +1050,6 @@ export default function OdontogramaPage({ params }: { params: { id: string } }) 
     </div>
   )
 }
-
 
 
 

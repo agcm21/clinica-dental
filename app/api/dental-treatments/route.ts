@@ -33,7 +33,7 @@ export async function GET(request: Request) {
     }
 
     // Ensure all treatments have a status
-    const treatmentsWithStatus = data.map((treatment) => ({
+    const treatmentsWithStatus = data.map((treatment: any) => ({
       ...treatment,
       status: treatment.status || "healthy",
     }))

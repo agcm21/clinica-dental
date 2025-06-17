@@ -63,16 +63,17 @@ export async function POST(request: Request) {
     } catch (fetchError) {
       clearTimeout(timeoutId)
 
-      if (fetchError.name === "AbortError") {
+      if (fetchError instanceof Error && fetchError.name === "AbortError") {
         console.error("Timeout al conectar con n8n")
         return NextResponse.json({ error: "Timeout al conectar con n8n (30s)" }, { status: 504 })
       }
 
       console.error("Error de fetch a n8n:", fetchError)
+      
       return NextResponse.json(
         {
-          error: `Error de conectividad con n8n: ${fetchError.message}`,
-          details: fetchError.name,
+          error: `Error de conectividad con n8n: ${fetchError instanceof Error ? fetchError.message : 'Error desconocido'}`,
+          details: fetchError instanceof Error ? fetchError.name : 'Unknown',
         },
         { status: 500 },
       )
@@ -88,6 +89,7 @@ export async function POST(request: Request) {
     )
   }
 }
+
 
 
 
