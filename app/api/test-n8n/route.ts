@@ -70,8 +70,8 @@ export async function POST(request: Request) {
     console.error("Error en prueba de n8n:", error)
     return NextResponse.json(
       {
-        error: "Error al enviar a n8n: " + error.message,
-        details: error.stack,
+        error: "Error al enviar a n8n: " + (error instanceof Error ? error.message : "Error desconocido"),
+        details: error instanceof Error ? error.stack : "Stack trace no disponible",
       },
       { status: 500 },
     )
