@@ -45,7 +45,7 @@ export async function POST(request: Request) {
 
     if (error) {
       console.error("Error al subir archivo:", error)
-      return NextResponse.json({ error: error.message }, { status: 500 })
+      return NextResponse.json({ error: error instanceof Error ? error.message : "Error desconocido" }, { status: 500 })
     }
 
     // Obtener URL pública

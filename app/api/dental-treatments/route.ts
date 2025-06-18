@@ -29,7 +29,7 @@ export async function GET(request: Request) {
 
     if (error) {
       console.error("Error al obtener tratamientos:", error)
-      return NextResponse.json({ error: error.message }, { status: 500 })
+      return NextResponse.json({ error: error instanceof Error ? error.message : "Error desconocido" }, { status: 500 })
     }
 
     // Ensure all treatments have a status
@@ -79,7 +79,7 @@ export async function POST(request: Request) {
 
     if (error) {
       console.error("Error al crear tratamiento:", error)
-      return NextResponse.json({ error: error.message }, { status: 500 })
+      return NextResponse.json({ error: error instanceof Error ? error.message : "Error desconocido" }, { status: 500 })
     }
 
     console.log("Treatment created successfully:", data[0])

@@ -44,7 +44,7 @@ export async function GET(request: Request) {
 
     if (error) {
       console.error("Error fetching appointments:", error)
-      return NextResponse.json({ error: error.message }, { status: 500 })
+      return NextResponse.json({ error: error instanceof Error ? error.message : "Error desconocido" }, { status: 500 })
     }
 
     return NextResponse.json(data)
@@ -86,7 +86,7 @@ export async function POST(request: Request) {
 
     if (error) {
       console.error("Error creating appointment:", error)
-      return NextResponse.json({ error: error.message }, { status: 500 })
+      return NextResponse.json({ error: error instanceof Error ? error.message : "Error desconocido" }, { status: 500 })
     }
 
     console.log("API: Appointment created successfully:", data)
