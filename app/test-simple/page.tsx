@@ -6,8 +6,9 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 
 export default function TestSimplePage() {
   const [loading, setLoading] = useState(false)
-  const [result, setResult] = useState(null)
-  const [error, setError] = useState(null)
+  // ✅ CORRECCIÓN: Tipar correctamente los estados
+  const [result, setResult] = useState<any | null>(null)
+  const [error, setError] = useState<string | null>(null)
 
   const testN8nConnection = async () => {
     setLoading(true)
@@ -36,7 +37,9 @@ export default function TestSimplePage() {
         console.error("❌ Error en la prueba:", data)
       }
     } catch (err) {
-      setError("Error de conexión: " + err.message)
+      // ✅ CORRECCIÓN: Manejo seguro del error
+      const errorMessage = err instanceof Error ? err.message : "Error desconocido"
+      setError("Error de conexión: " + errorMessage)
       console.error("❌ Error de fetch:", err)
     } finally {
       setLoading(false)
