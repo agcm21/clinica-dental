@@ -136,11 +136,7 @@ export default function PacientesPage() {
         setPatients(patientsWithStatus)
       } catch (error) {
         console.error("Error:", error)
-        toast({
-          title: "Error",
-          description: "No se pudieron cargar los pacientes",
-          variant: "destructive",
-        })
+        toast.error("No se pudieron cargar los pacientes")
         setPatients([]) // Establecer un array vacío en caso de error
       } finally {
         setIsLoading(false)
@@ -178,11 +174,7 @@ export default function PacientesPage() {
 
         console.error("Error:", error)
         setPatientDetails({})
-        toast({
-          title: "Error",
-          description: "No se pudieron cargar los detalles del paciente",
-          variant: "destructive",
-        })
+        toast.error("No se pudieron cargar los detalles del paciente")
       } finally {
         setIsLoadingDetails(false)
       }
@@ -239,17 +231,10 @@ export default function PacientesPage() {
         setSelectedPatient({ ...selectedPatient, status: newStatus })
       }
 
-      toast({
-        title: "Estado actualizado",
-        description: `El estado del paciente ha sido actualizado a ${statusLabels[newStatus as keyof typeof statusLabels]}`,
-      })
+      toast.success(`El estado del paciente ha sido actualizado a ${statusLabels[newStatus as keyof typeof statusLabels]}`)
     } catch (error) {
       console.error("Error:", error)
-      toast({
-        title: "Error",
-        description: "No se pudo actualizar el estado del paciente",
-        variant: "destructive",
-      })
+      toast.error("No se pudo actualizar el estado del paciente")
     }
   }
 
@@ -274,17 +259,10 @@ export default function PacientesPage() {
         setPatientDetails(null)
       }
 
-      toast({
-        title: "Paciente eliminado",
-        description: "El paciente ha sido eliminado exitosamente",
-      })
+      toast.success("El paciente ha sido eliminado exitosamente")
     } catch (error) {
       console.error("Error:", error)
-      toast({
-        title: "Error",
-        description: "No se pudo eliminar el paciente",
-        variant: "destructive",
-      })
+      toast.error("No se pudo eliminar el paciente")
     } finally {
       setPatientToDelete(null)
       setIsDeleteDialogOpen(false)
