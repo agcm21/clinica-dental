@@ -9,8 +9,8 @@ import { Label } from "@/components/ui/label"
 export default function TestN8nPage() {
   const [presupuestoId, setPresupuestoId] = useState("123")
   const [loading, setLoading] = useState(false)
-  const [result, setResult] = useState(null)
-  const [error, setError] = useState(null)
+  const [result, setResult] = useState<any>(null)
+  const [error, setError] = useState<string | null>(null)
 
   const testN8nConnection = async () => {
     setLoading(true)
@@ -34,7 +34,7 @@ export default function TestN8nPage() {
         setError(data.error || "Error desconocido")
       }
     } catch (err) {
-      setError("Error de conexión: ")
+      setError("Error de conexión: " + (err instanceof Error ? err.message : "Error desconocido"))
     } finally {
       setLoading(false)
     }
