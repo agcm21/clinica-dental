@@ -69,20 +69,23 @@ export async function POST(request: Request) {
       }
 
       console.error("Error de fetch a n8n:", fetchError)
-      
+
+      // ✅ CORRECCIÓN: Línea 74 - Eliminar fetch() incorrecto y usar fetchError
       return NextResponse.json(
         {
-          error: `Error de conectividad con n8n: ${fetchError instanceof Error ? fetch(error instanceof Error ? error.message : "Error desconocido") : 'Error desconocido'}`,
-          details: fetchError instanceof Error ? fetchError.name : 'Unknown',
+          error: `Error de conectividad con n8n: ${fetchError instanceof Error ? fetchError.message : "Error desconocido"}`,
+          details: fetchError instanceof Error ? fetchError.name : "Unknown",
         },
         { status: 500 },
       )
     }
   } catch (error) {
     console.error("Error en API interna:", error)
+
+    // ✅ CORRECCIÓN: Línea 85 - Simplificar verificación duplicada
     return NextResponse.json(
       {
-        error: error instanceof Error ? (error instanceof Error ? error.message : "Error desconocido") : "Error inesperado",
+        error: error instanceof Error ? error.message : "Error inesperado",
         type: error instanceof Error ? error.name : "Unknown",
       },
       { status: 500 },
