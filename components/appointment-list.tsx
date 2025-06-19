@@ -64,7 +64,7 @@ export function AppointmentList() {
           .limit(3)
 
         if (error) {
-          throw new Error(`Error al cargar citas: ${error.message}`)
+          throw new Error(`Error al cargar citas: ${(error instanceof Error ? error.message : "Error desconocido")}`)
         }
 
         setAppointments(data || [])
@@ -175,3 +175,4 @@ export function AppointmentList() {
     </div>
   )
 }
+

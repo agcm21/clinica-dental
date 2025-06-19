@@ -181,7 +181,7 @@ export function AppointmentForm() {
 
         if (error) {
           console.error("Error creating patient:", error)
-          throw new Error(`Error al crear paciente: ${error.message}`)
+          throw new Error(`Error al crear paciente: ${(error instanceof Error ? error.message : "Error desconocido")}`)
         }
 
         if (!data || data.length === 0) {
@@ -219,7 +219,7 @@ export function AppointmentForm() {
 
       if (error) {
         console.error("Error creating appointment:", error)
-        throw new Error(`Error al crear cita: ${error.message}`)
+        throw new Error(`Error al crear cita: ${(error instanceof Error ? error.message : "Error desconocido")}`)
       }
 
       console.log("Appointment created successfully:", data)
@@ -242,7 +242,7 @@ export function AppointmentForm() {
       console.error("Error in handleSubmit:", error)
       toast({
         title: "Error",
-        description: error.message || "Ocurrió un error al crear la cita",
+        description: (error instanceof Error ? error.message : "Error desconocido") || "Ocurrió un error al crear la cita",
         variant: "destructive",
       })
       // Restablecer el estado de envío del formulario en caso de error
@@ -561,3 +561,4 @@ export function AppointmentForm() {
     </form>
   )
 }
+

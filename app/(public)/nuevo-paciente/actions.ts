@@ -35,7 +35,7 @@ export async function createPatient(patientData: any): Promise<CreatePatientResu
       console.error("Error en Supabase:", error)
       return {
         success: false,
-        error: error.message,
+        error: (error instanceof Error ? error.message : "Error desconocido"),
       }
     }
 
@@ -47,7 +47,8 @@ export async function createPatient(patientData: any): Promise<CreatePatientResu
     console.error("Error inesperado:", error)
     return {
       success: false,
-      error: error instanceof Error ? error.message : "Error inesperado al crear el paciente",
+      error: error instanceof Error ? (error instanceof Error ? error.message : "Error desconocido") : "Error inesperado al crear el paciente",
     }
   }
 }
+

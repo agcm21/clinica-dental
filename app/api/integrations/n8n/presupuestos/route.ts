@@ -72,7 +72,7 @@ export async function POST(request: Request) {
       
       return NextResponse.json(
         {
-          error: `Error de conectividad con n8n: ${fetchError instanceof Error ? fetchError.message : 'Error desconocido'}`,
+          error: `Error de conectividad con n8n: ${fetchError instanceof Error ? fetch(error instanceof Error ? error.message : "Error desconocido") : 'Error desconocido'}`,
           details: fetchError instanceof Error ? fetchError.name : 'Unknown',
         },
         { status: 500 },
@@ -82,13 +82,14 @@ export async function POST(request: Request) {
     console.error("Error en API interna:", error)
     return NextResponse.json(
       {
-        error: error instanceof Error ? error.message : "Error inesperado",
+        error: error instanceof Error ? (error instanceof Error ? error.message : "Error desconocido") : "Error inesperado",
         type: error instanceof Error ? error.name : "Unknown",
       },
       { status: 500 },
     )
   }
 }
+
 
 
 

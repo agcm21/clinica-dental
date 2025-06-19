@@ -149,7 +149,7 @@ export default function AppointmentsPage() {
         const { data, error } = await query
 
         if (error) {
-          throw new Error(`Error al cargar citas: ${error.message}`)
+          throw new Error(`Error al cargar citas: ${(error instanceof Error ? error.message : "Error desconocido")}`)
         }
 
         console.log("Appointments loaded:", data?.length || 0)
@@ -323,7 +323,7 @@ export default function AppointmentsPage() {
       const { error } = await supabase.from("appointments").update({ status: newStatus }).eq("id", id)
 
       if (error) {
-        throw new Error(`Error al actualizar estado: ${error.message}`)
+        throw new Error(`Error al actualizar estado: ${(error instanceof Error ? error.message : "Error desconocido")}`)
       }
 
       // Update local state
@@ -368,7 +368,7 @@ export default function AppointmentsPage() {
         .eq("id", appointmentToDelete.id)
 
       if (error) {
-        throw new Error(`Error al cancelar la cita: ${error.message}`)
+        throw new Error(`Error al cancelar la cita: ${(error instanceof Error ? error.message : "Error desconocido")}`)
       }
 
       // Update local state
@@ -690,4 +690,5 @@ export default function AppointmentsPage() {
     </div>
   )
 }
+
 

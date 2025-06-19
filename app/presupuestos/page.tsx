@@ -66,7 +66,7 @@ export default function PresupuestosPage() {
       }
     } catch (error) {
       console.error("Error fetching presupuestos:", error)
-      setError(error instanceof Error ? error.message : "Error desconocido")
+      setError(error instanceof Error ? (error instanceof Error ? error.message : "Error desconocido") : "Error desconocido")
       toast({
         title: "Error",
         description: "Error de conexión al cargar presupuestos",
@@ -182,7 +182,7 @@ export default function PresupuestosPage() {
       console.error("Error enviando presupuesto:", error)
       toast({
         title: "Error al enviar",
-        description: error instanceof Error ? error.message : "Error inesperado al enviar el presupuesto",
+        description: error instanceof Error ? (error instanceof Error ? error.message : "Error desconocido") : "Error inesperado al enviar el presupuesto",
         variant: "destructive",
       })
     } finally {
@@ -442,6 +442,7 @@ export default function PresupuestosPage() {
     </div>
   )
 }
+
 
 
 

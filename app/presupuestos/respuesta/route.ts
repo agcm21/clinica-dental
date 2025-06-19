@@ -28,7 +28,7 @@ export async function POST(request: Request) {
 
       if (error) {
         console.error("Error inserting respuesta:", error)
-        return NextResponse.json({ message: "Failed to insert respuesta", error: error.message }, { status: 500 })
+        return NextResponse.json({ message: "Failed to insert respuesta", error: (error instanceof Error ? error.message : "Error desconocido") }, { status: 500 })
       }
     }
 
@@ -38,3 +38,4 @@ export async function POST(request: Request) {
     return NextResponse.json({ message: "Internal server error", error: (error as any).message }, { status: 500 })
   }
 }
+

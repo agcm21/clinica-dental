@@ -285,7 +285,7 @@ export default function NuevoPresupuestoPage() {
       console.error("=== ERROR COMPLETO ===", error)
       toast({
         title: "Error al guardar",
-        description: error instanceof Error ? error.message : "Error inesperado al guardar el presupuesto",
+        description: error instanceof Error ? (error instanceof Error ? error.message : "Error desconocido") : "Error inesperado al guardar el presupuesto",
         variant: "destructive",
       })
     } finally {
@@ -611,5 +611,6 @@ export default function NuevoPresupuestoPage() {
     </div>
   )
 }
+
 
 

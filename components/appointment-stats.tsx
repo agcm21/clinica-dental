@@ -49,7 +49,7 @@ export function AppointmentStats() {
           .not("status", "eq", "cancelled")
 
         if (error) {
-          throw new Error(`Error fetching appointment stats: ${error.message}`)
+          throw new Error(`Error fetching appointment stats: ${(error instanceof Error ? error.message : "Error desconocido")}`)
         }
 
         if (appointments) {
@@ -137,3 +137,4 @@ export function AppointmentStats() {
     </Card>
   )
 }
+

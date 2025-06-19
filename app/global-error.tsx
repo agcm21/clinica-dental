@@ -21,7 +21,7 @@ export default function GlobalError({
         <div className="flex min-h-screen flex-col items-center justify-center">
           <div className="max-w-md text-center">
             <h2 className="text-2xl font-bold mb-4">Error en la aplicación</h2>
-            <p className="mb-6 text-muted-foreground">{error.message || "Ha ocurrido un error inesperado."}</p>
+            <p className="mb-6 text-muted-foreground">{(error instanceof Error ? error.message : "Error desconocido") || "Ha ocurrido un error inesperado."}</p>
             <Button onClick={() => reset()}>Intentar de nuevo</Button>
           </div>
         </div>
@@ -29,3 +29,4 @@ export default function GlobalError({
     </html>
   )
 }
+

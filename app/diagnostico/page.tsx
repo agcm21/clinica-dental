@@ -25,7 +25,7 @@ export default function DiagnosticoPage() {
         
         if (error) {
           setConnectionStatus("Error de conexión")
-          setErrorMessage(error.message)
+          setErrorMessage((error instanceof Error ? error.message : "Error desconocido"))
           setRawResponse(JSON.stringify({ data, error }, null, 2))
         } else {
           setConnectionStatus("Conectado correctamente")
@@ -35,7 +35,7 @@ export default function DiagnosticoPage() {
         console.error("Error al verificar conexión:", error)
         setConnectionStatus("Error")
         if (error instanceof Error) {
-          setErrorMessage(error.message)
+          setErrorMessage((error instanceof Error ? error.message : "Error desconocido"))
         } else {
           setErrorMessage("Error desconocido")
         }
@@ -127,3 +127,4 @@ export default function DiagnosticoPage() {
     </div>
   )
 }
+

@@ -16,7 +16,7 @@ export async function GET() {
 
     if (error) {
       console.error("GET /api/patients - Error de Supabase:", error);
-      return NextResponse.json({ error: error instanceof Error ? error.message : "Error desconocido" }, { status: 500 });
+      return NextResponse.json({ error: error instanceof Error ? (error instanceof Error ? error.message : "Error desconocido") : "Error desconocido" }, { status: 500 });
     }
 
     console.log(`GET /api/patients - Éxito, ${data?.length || 0} pacientes encontrados`);
@@ -44,7 +44,7 @@ export async function POST(request: Request) {
 
     if (error) {
       console.error("POST /api/patients - Error de Supabase:", error);
-      return NextResponse.json({ error: error instanceof Error ? error.message : "Error desconocido" }, { status: 500 });
+      return NextResponse.json({ error: error instanceof Error ? (error instanceof Error ? error.message : "Error desconocido") : "Error desconocido" }, { status: 500 });
     }
 
     console.log("POST /api/patients - Paciente creado con éxito");
@@ -54,3 +54,4 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Error al crear paciente" }, { status: 500 });
   }
 }
+

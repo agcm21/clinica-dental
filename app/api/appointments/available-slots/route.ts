@@ -68,7 +68,7 @@ export async function GET(request: Request) {
 
     if (error) {
       console.error("API: Error fetching appointments:", error)
-      return NextResponse.json({ error: error instanceof Error ? error.message : "Error desconocido" }, { status: 500 })
+      return NextResponse.json({ error: error instanceof Error ? (error instanceof Error ? error.message : "Error desconocido") : "Error desconocido" }, { status: 500 })
     }
 
     console.log(`API: Encontradas ${appointments.length} citas existentes para la fecha ${date}`)
@@ -98,3 +98,4 @@ export async function GET(request: Request) {
     return NextResponse.json({ error: "Failed to fetch available slots" }, { status: 500 })
   }
 }
+

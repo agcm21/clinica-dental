@@ -28,7 +28,7 @@ export function DebugPanel() {
         addResult(`Bucket created: ${created}`)
       }
     } catch (error) {
-      addResult(`Error: ${error instanceof Error ? error.message : String(error)}`)
+      addResult(`Error: ${error instanceof Error ? (error instanceof Error ? error.message : "Error desconocido") : String(error)}`)
     } finally {
       setIsLoading(false)
     }
@@ -67,7 +67,7 @@ export function DebugPanel() {
         })
 
       if (error) {
-        addResult(`Error al subir: ${error.message}`)
+        addResult(`Error al subir: ${(error instanceof Error ? error.message : "Error desconocido")}`)
       } else {
         addResult(`Subida exitosa: ${JSON.stringify(data)}`)
 
@@ -81,7 +81,7 @@ export function DebugPanel() {
         addResult(`Acceso a URL: ${response.ok ? "OK" : "Fallido"} (${response.status})`)
       }
     } catch (error) {
-      addResult(`Error inesperado: ${error instanceof Error ? error.message : String(error)}`)
+      addResult(`Error inesperado: ${error instanceof Error ? (error instanceof Error ? error.message : "Error desconocido") : String(error)}`)
     } finally {
       setIsLoading(false)
     }
@@ -119,3 +119,4 @@ export function DebugPanel() {
     </Card>
   )
 }
+

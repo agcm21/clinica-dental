@@ -8,7 +8,7 @@ export async function GET() {
 
     if (error) {
       console.error("Error al verificar tabla presupuestos:", error)
-      return NextResponse.json({ success: false, error: error.message }, { status: 500 })
+      return NextResponse.json({ success: false, error: (error instanceof Error ? error.message : "Error desconocido") }, { status: 500 })
     }
 
     return NextResponse.json({ success: true })
@@ -17,3 +17,4 @@ export async function GET() {
     return NextResponse.json({ success: false, error: "Error al verificar tabla de presupuestos" }, { status: 500 })
   }
 }
+
