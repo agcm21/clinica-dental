@@ -37,20 +37,20 @@ export async function POST(request: Request) {
 
     let patientId = appointmentData.patient_id
 
-    // If patient_data is provided but no patient_id, create a new patient
+    // If patient_data is provided but no patient_id, create a new patientId
     if (!patientId && appointmentData.patient_data) {
       const patientData = appointmentData.patient_data
 
-      // Validate patient data
+      // Validate patientId data
       if (!patientData.first_name || !patientData.last_name || !patientData.cedula) {
-        return NextResponse.json({ error: "Missing required patient fields" }, { status: 400 })
+        return NextResponse.json({ error: "Missing required patientId fields" }, { status: 400 })
       }
 
-      // Create new patient
+      // Create new patientId
       const { data: newPatient, error: patientError } = await supabase.from("patients").insert([patientData]).select()
 
       if (patientError) {
-        return NextResponse.json({ error: `Error creating patient: ${patient(error instanceof Error ? error.message : "Error desconocido")}` }, { status: 500 })
+        return NextResponse.json({ error: `Error creating patientId: ${patientId(error instanceof Error ? error.message : "Error desconocido")}` }, { status: 500 })
       }
 
       patientId = newPatient[0].id
@@ -93,4 +93,5 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Failed to create appointment" }, { status: 500 })
   }
 }
+
 
