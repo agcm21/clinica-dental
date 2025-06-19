@@ -771,7 +771,7 @@ export default function OdontogramaPage({ params }: { params: { id: string } }) 
                           key={number}
                           number={number}
                           onClick={() => handleToothClick(number)}
-                          status={toothStates[number] || "healthy"}
+                          status={(toothStates[number] as "healthy" | "completed" | "in-treatment" | "pending") || "healthy"}
                         />
                       ))}
                     </div>
@@ -781,7 +781,7 @@ export default function OdontogramaPage({ params }: { params: { id: string } }) 
                           key={number}
                           number={number}
                           onClick={() => handleToothClick(number)}
-                          status={toothStates[number] || "healthy"}
+                          status={(toothStates[number] as "healthy" | "completed" | "in-treatment" | "pending") || "healthy"}
                         />
                       ))}
                     </div>
@@ -795,7 +795,7 @@ export default function OdontogramaPage({ params }: { params: { id: string } }) 
                           key={number}
                           number={number}
                           onClick={() => handleToothClick(number)}
-                          status={toothStates[number] || "healthy"}
+                          status={(toothStates[number] as "healthy" | "completed" | "in-treatment" | "pending") || "healthy"}
                         />
                       ))}
                     </div>
@@ -805,7 +805,7 @@ export default function OdontogramaPage({ params }: { params: { id: string } }) 
                           key={number}
                           number={number}
                           onClick={() => handleToothClick(number)}
-                          status={toothStates[number] || "healthy"}
+                          status={(toothStates[number] as "healthy" | "completed" | "in-treatment" | "pending") || "healthy"}
                         />
                       ))}
                     </div>
