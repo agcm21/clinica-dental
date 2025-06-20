@@ -37,20 +37,26 @@ export async function POST(request: Request) {
 
     let patientId = appointmentData.patient_id
 
-    // If patient_data is provided but no patient_id, create a new patientId
+    // If patient_data is provided but no patient_id, create a new patient
     if (!patientId && appointmentData.patient_data) {
       const patientData = appointmentData.patient_data
 
-      // Validate patientId data
+      // Validate patient data
       if (!patientData.first_name || !patientData.last_name || !patientData.cedula) {
-        return NextResponse.json({ error: "Missing required patientId fields" }, { status: 400 })
+        return NextResponse.json({ error: "Missing required patient fields" }, { status: 400 })
       }
 
-      // Create new patientId
+      // Create new patient
       const { data: newPatient, error: patientError } = await supabase.from("patients").insert([patientData]).select()
 
       if (patientError) {
-        return NextResponse.json({ error: `Error creating patientId: ${patientId(error instanceof Error ? error.message : "Error desconocido")}` }, { status: 500 })
+        // ✅ CORRECCIÓN: Usar patientError en lugar de error, eliminar patientId( incorrecto
+        return NextResponse.json(
+          {
+            error: `Error creating patient: ${patientError instanceof Error ? patientError.message : "Error desconocido"}`,
+          },
+          { status: 500 },
+        )
       }
 
       patientId = newPatient[0].id
@@ -84,7 +90,7 @@ export async function POST(request: Request) {
       .select()
 
     if (error) {
-      return NextResponse.json({ error: (error instanceof Error ? error.message : "Error desconocido") }, { status: 500 })
+      return NextResponse.json({ error: error instanceof Error ? error.message : "Error desconocido" }, { status: 500 })
     }
 
     return NextResponse.json(data[0], { status: 201 })
@@ -93,5 +99,6 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Failed to create appointment" }, { status: 500 })
   }
 }
+
 
 
