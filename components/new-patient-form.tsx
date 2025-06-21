@@ -1,15 +1,10 @@
 "use client"
 
 import { useState } from "react"
-import {
-  FormField,
-  FormLabel,
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@radix-ui/react-select"
+import { Label } from "@/components/ui/label"
+import { Input } from "@/components/ui/input"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { Button } from "@/components/ui/button"
 
 interface Patient {
   name: string
@@ -37,15 +32,20 @@ const NewPatientForm = () => {
   ]
 
   return (
-    <form>
-      <FormField>
-        <FormLabel>Nombre</FormLabel>
-        <input type="text" value={patient.name} onChange={(e) => setPatient({ ...patient, name: e.target.value })} />
-      </FormField>
+    <form className="space-y-6 p-6">
+      <div className="space-y-2">
+        <Label htmlFor="name">Nombre</Label>
+        <Input
+          id="name"
+          type="text"
+          value={patient.name}
+          onChange={(e) => setPatient({ ...patient, name: e.target.value })}
+          placeholder="Ingrese el nombre completo"
+        />
+      </div>
 
-      {/* Update the gender select component to use the options */}
-      <FormField>
-        <FormLabel>Género</FormLabel>
+      <div className="space-y-2">
+        <Label htmlFor="gender">Género</Label>
         <Select value={patient.gender} onValueChange={(value) => setPatient({ ...patient, gender: value })}>
           <SelectTrigger>
             <SelectValue placeholder="Seleccione el género" />
@@ -58,11 +58,10 @@ const NewPatientForm = () => {
             ))}
           </SelectContent>
         </Select>
-      </FormField>
+      </div>
 
-      {/* Add blood type select component with options */}
-      <FormField>
-        <FormLabel>Grupo Sanguíneo</FormLabel>
+      <div className="space-y-2">
+        <Label htmlFor="blood-type">Grupo Sanguíneo</Label>
         <Select
           value={patient.blood_type || ""}
           onValueChange={(value) => setPatient({ ...patient, blood_type: value })}
@@ -78,10 +77,11 @@ const NewPatientForm = () => {
             ))}
           </SelectContent>
         </Select>
-      </FormField>
+      </div>
 
-      {/* ... other form fields */}
-      <button type="submit">Guardar</button>
+      <Button type="submit" className="w-full">
+        Guardar Paciente
+      </Button>
     </form>
   )
 }
