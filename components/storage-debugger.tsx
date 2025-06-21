@@ -60,10 +60,10 @@ export function StorageDebugger() {
         return
       }
 
-      addLog(`Buckets disponibles: ${buckets.map((b) => b.name).join(", ") || "ninguno"}`)
+      addLog(`Buckets disponibles: ${buckets.map((b: any) => b.name).join(", ") || "ninguno"}`)
 
       // Verificar bucket específico
-      const bucket = buckets.find((b) => b.name === "treatment-images")
+      const bucket = buckets.find((b: any) => b.name === "treatment-images")
 
       if (bucket) {
         addLog(`✅ Bucket 'treatment-images' encontrado`)
