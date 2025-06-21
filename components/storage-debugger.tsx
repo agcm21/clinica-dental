@@ -27,7 +27,7 @@ export function StorageDebugger() {
       const { data, error } = await supabase.auth.getSession()
 
       if (error) {
-        addLog(`❌ Error de conexión: ${(error instanceof Error ? error.message : "Error desconocido")}`)
+        addLog(`❌ Error de conexión: ${error instanceof Error ? error.message : "Error desconocido"}`)
       } else {
         addLog("✅ Conexión establecida correctamente")
       }
@@ -39,7 +39,7 @@ export function StorageDebugger() {
       addLog(`URL de Supabase: ${url ? "✅ Configurada" : "❌ No configurada"}`)
       addLog(`Clave anónima: ${key ? "✅ Configurada" : "❌ No configurada"}`)
     } catch (error) {
-      addLog(`❌ Error inesperado: ${error instanceof Error ? (error instanceof Error ? error.message : "Error desconocido") : String(error)}`)
+      addLog(`❌ Error inesperado: ${error instanceof Error ? error.message : String(error)}`)
     } finally {
       setIsLoading(false)
     }
@@ -54,7 +54,9 @@ export function StorageDebugger() {
       const { data: buckets, error: bucketsError } = await supabase.storage.listBuckets()
 
       if (bucketsError) {
-        addLog(`❌ Error al listar buckets: ${buckets(error instanceof Error ? error.message : "Error desconocido")}`)
+        addLog(
+          `❌ Error al listar buckets: ${bucketsError instanceof Error ? bucketsError.message : "Error desconocido"}`,
+        )
         return
       }
 
@@ -70,7 +72,9 @@ export function StorageDebugger() {
         const { data: files, error: listError } = await supabase.storage.from("treatment-images").list()
 
         if (listError) {
-          addLog(`❌ Error al acceder al bucket: ${list(error instanceof Error ? error.message : "Error desconocido")}`)
+          addLog(
+            `❌ Error al acceder al bucket: ${listError instanceof Error ? listError.message : "Error desconocido"}`,
+          )
         } else {
           addLog(`✅ Acceso al bucket correcto. Archivos: ${files.length}`)
         }
@@ -88,7 +92,7 @@ export function StorageDebugger() {
         }
       }
     } catch (error) {
-      addLog(`❌ Error inesperado: ${error instanceof Error ? (error instanceof Error ? error.message : "Error desconocido") : String(error)}`)
+      addLog(`❌ Error inesperado: ${error instanceof Error ? error.message : String(error)}`)
     } finally {
       setIsLoading(false)
     }
@@ -127,7 +131,7 @@ export function StorageDebugger() {
       })
 
       if (error) {
-        addLog(`❌ Error al subir: ${(error instanceof Error ? error.message : "Error desconocido")}`)
+        addLog(`❌ Error al subir: ${error instanceof Error ? error.message : "Error desconocido"}`)
       } else {
         addLog(`✅ Archivo subido exitosamente: ${data.path}`)
 
@@ -141,11 +145,11 @@ export function StorageDebugger() {
           const response = await fetch(urlData.publicUrl, { method: "HEAD" })
           addLog(`Acceso a URL: ${response.ok ? "✅ OK" : "❌ Fallido"} (${response.status})`)
         } catch (fetchError) {
-          addLog(`❌ Error al verificar URL: ${fetchError instanceof Error ? fetch(error instanceof Error ? error.message : "Error desconocido") : String(fetchError)}`)
+          addLog(`❌ Error al verificar URL: ${fetchError instanceof Error ? fetchError.message : String(fetchError)}`)
         }
       }
     } catch (error) {
-      addLog(`❌ Error inesperado: ${error instanceof Error ? (error instanceof Error ? error.message : "Error desconocido") : String(error)}`)
+      addLog(`❌ Error inesperado: ${error instanceof Error ? error.message : String(error)}`)
     } finally {
       setIsLoading(false)
     }
@@ -178,7 +182,9 @@ export function StorageDebugger() {
       })
 
       if (updateError) {
-        addLog(`❌ Error al actualizar bucket: ${update(error instanceof Error ? error.message : "Error desconocido")}`)
+        addLog(
+          `❌ Error al actualizar bucket: ${updateError instanceof Error ? updateError.message : "Error desconocido"}`,
+        )
       } else {
         addLog("✅ Configuración del bucket actualizada correctamente")
 
@@ -189,7 +195,7 @@ export function StorageDebugger() {
         })
       }
     } catch (error) {
-      addLog(`❌ Error inesperado: ${error instanceof Error ? (error instanceof Error ? error.message : "Error desconocido") : String(error)}`)
+      addLog(`❌ Error inesperado: ${error instanceof Error ? error.message : String(error)}`)
     } finally {
       setIsLoading(false)
     }
@@ -246,4 +252,3 @@ export function StorageDebugger() {
     </Card>
   )
 }
-
