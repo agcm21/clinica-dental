@@ -86,7 +86,7 @@ export async function getAvailableTimeSlots(date: string) {
     }
 
     // Generate all possible time slots for the day
-    const allSlots = []
+    const allSlots: Array<{ start: string; end: string; available: boolean }> = []
     for (let hour = CLINIC_HOURS.start; hour < CLINIC_HOURS.end; hour++) {
       // Skip excluded hours
       if (!EXCLUDED_HOURS.includes(hour)) {
