@@ -12,7 +12,7 @@ export async function uploadTreatmentImage(file: File, patientId: string, treatm
       throw new Error(`Error al verificar buckets: ${bucketsError.message}`)
     }
 
-    const bucket = buckets.find((b) => b.name === "treatment-images")
+    const bucket = buckets.find((b: any) => b.name === "treatment-images")
     if (!bucket) {
       throw new Error('Bucket "treatment-images" no encontrado')
     }
@@ -104,7 +104,7 @@ export async function checkBucketExists(): Promise<boolean> {
       return false
     }
 
-    const bucketExists = buckets.some((bucket) => bucket.name === "treatment-images")
+    const bucketExists = buckets.some((bucket: any) => bucket.name === "treatment-images")
     console.log(`Bucket 'treatment-images' ${bucketExists ? "existe" : "no existe"}`)
 
     return bucketExists
@@ -150,7 +150,7 @@ export async function verifyBucketAccess() {
       throw new Error(`Error al listar buckets: ${bucketsError.message}`)
     }
 
-    const bucket = buckets.find((b) => b.name === "treatment-images")
+    const bucket = buckets.find((b: any) => b.name === "treatment-images")
     if (!bucket) {
       return {
         exists: false,
