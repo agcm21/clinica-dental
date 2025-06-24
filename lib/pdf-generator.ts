@@ -21,27 +21,27 @@ export async function generatePresupuestoPDF(presupuesto: any): Promise<string> 
 
     // Header - Título principal
     pdf.setFontSize(20)
-    pdf.setTextColor(...primaryColor)
+    pdf.setTextColor(primaryColor[0], primaryColor[1], primaryColor[2])
     pdf.text("PRESUPUESTO DENTAL", 105, 25, { align: "center" })
 
     // Número de presupuesto
     pdf.setFontSize(10)
-    pdf.setTextColor(...grayColor)
+    pdf.setTextColor(grayColor[0], grayColor[1], grayColor[2])
     const presupuestoNum = presupuesto.id?.substring(0, 8) || "TEMP-" + Date.now().toString().substring(0, 8)
     pdf.text(`No. ${presupuestoNum}`, 105, 32, { align: "center" })
 
     // Línea separadora
-    pdf.setDrawColor(...grayColor)
+    pdf.setDrawColor(grayColor[0], grayColor[1], grayColor[2])
     pdf.line(20, 40, 190, 40)
 
     // DATOS DEL PACIENTE
     let yPos = 55
     pdf.setFontSize(10)
-    pdf.setTextColor(...grayColor)
+    pdf.setTextColor(grayColor[0], grayColor[1], grayColor[2])
     pdf.text("DATOS DEL PACIENTE", 20, yPos)
 
     yPos += 8
-    pdf.setTextColor(...blackColor)
+    pdf.setTextColor(blackColor[0], blackColor[1], blackColor[2])
     pdf.setFontSize(9)
     pdf.text(`Nombre: ${presupuesto.nombre} ${presupuesto.apellido}`, 20, yPos)
 
@@ -59,11 +59,11 @@ export async function generatePresupuestoPDF(presupuesto: any): Promise<string> 
     // DATOS DEL PRESUPUESTO (lado derecho)
     let yPosRight = 55
     pdf.setFontSize(10)
-    pdf.setTextColor(...grayColor)
+    pdf.setTextColor(grayColor[0], grayColor[1], grayColor[2])
     pdf.text("DATOS DEL PRESUPUESTO", 110, yPosRight)
 
     yPosRight += 8
-    pdf.setTextColor(...blackColor)
+    pdf.setTextColor(blackColor[0], blackColor[1], blackColor[2])
     pdf.setFontSize(9)
     pdf.text(`Fecha: ${new Date().toLocaleDateString()}`, 110, yPosRight)
 
@@ -76,7 +76,7 @@ export async function generatePresupuestoPDF(presupuesto: any): Promise<string> 
     // DETALLE DEL PRESUPUESTO
     yPos = Math.max(yPos, yPosRight) + 20
     pdf.setFontSize(10)
-    pdf.setTextColor(...grayColor)
+    pdf.setTextColor(grayColor[0], grayColor[1], grayColor[2])
     pdf.text("DETALLE DEL PRESUPUESTO", 20, yPos)
 
     // Tabla de presupuesto
@@ -92,7 +92,7 @@ export async function generatePresupuestoPDF(presupuesto: any): Promise<string> 
     pdf.rect(160, yPos, 30, 8)
 
     pdf.setFontSize(9)
-    pdf.setTextColor(...blackColor)
+    pdf.setTextColor(blackColor[0], blackColor[1], blackColor[2])
     pdf.text("Concepto", 22, yPos + 5)
     pdf.text("Descripción", 92, yPos + 5)
     pdf.text("Monto", 162, yPos + 5)
@@ -116,20 +116,20 @@ export async function generatePresupuestoPDF(presupuesto: any): Promise<string> 
     pdf.rect(20, yPos, 130, 10)
     pdf.rect(150, yPos, 40, 10)
 
-    pdf.setFont(undefined, "bold")
+    pdf.setFont("helvetica", "bold")
     pdf.text("TOTAL", 22, yPos + 6)
     pdf.text(`$${formatCurrency(presupuesto.monto)}`, 152, yPos + 6)
-    pdf.setFont(undefined, "normal")
+    pdf.setFont("helvetica", "normal")
 
     // NOTAS
     yPos += 25
     pdf.setFontSize(10)
-    pdf.setTextColor(...grayColor)
+    pdf.setTextColor(grayColor[0], grayColor[1], grayColor[2])
     pdf.text("NOTAS", 20, yPos)
 
     yPos += 8
     pdf.setFontSize(8)
-    pdf.setTextColor(...blackColor)
+    pdf.setTextColor(blackColor[0], blackColor[1], blackColor[2])
     const notasText =
       "Este presupuesto no incluye tratamientos adicionales que pudieran ser necesarios durante el proceso. La tarifa puede variar si las condiciones del tratamiento cambian."
     const splitNotes = pdf.splitTextToSize(notasText, 170)
@@ -137,12 +137,12 @@ export async function generatePresupuestoPDF(presupuesto: any): Promise<string> 
 
     // Footer
     yPos = 270
-    pdf.setDrawColor(...grayColor)
+    pdf.setDrawColor(grayColor[0], grayColor[1], grayColor[2])
     pdf.line(20, yPos, 190, yPos)
 
     yPos += 8
     pdf.setFontSize(8)
-    pdf.setTextColor(...grayColor)
+    pdf.setTextColor(grayColor[0], grayColor[1], grayColor[2])
     pdf.text("Clínica Dental - Av. Principal #123 - (123) 456-7890 - info@clinicadental.com", 105, yPos, {
       align: "center",
     })
