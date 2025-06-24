@@ -10,7 +10,7 @@ export async function checkBucketExists(): Promise<boolean> {
       return false
     }
 
-    const bucketExists = buckets.some((bucket) => bucket.name === "treatment-images")
+    const bucketExists = buckets.some((bucket: any) => bucket.name === "treatment-images")
     console.log(`Bucket 'treatment-images' ${bucketExists ? "existe" : "no existe"}`)
 
     return bucketExists
