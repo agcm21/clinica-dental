@@ -16,7 +16,7 @@ export async function POST(request: Request) {
     const presupuestoId = data.presupuestoId || data.id // Asegúrate de usar el campo correcto
     if (presupuestoId) {
       // Usamos 'actualizar-respuesta' como el endpoint correcto para la respuesta del cliente
-      data.callback_url = `${appBaseUrl}/api/presupuestos/actualizar-respuesta/${presupuestoId}`
+      data.callback_url = `${appBaseUrl}/api/presupuestos/actualizar-respuesta?id=${presupuestoId}` // Cambiado a query param
     } else {
       console.warn("presupuestoId no encontrado en los datos, la callback_url podría ser incorrecta.")
       // Si no hay presupuestoId, podrías optar por no enviar callback_url o usar una genérica
