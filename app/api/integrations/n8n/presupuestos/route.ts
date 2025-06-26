@@ -11,10 +11,9 @@ export async function POST(request: Request) {
     // Esto asegura que la callback_url siempre apunte al dominio correcto (local o desplegado)
     // Original: const appBaseUrl = new URL(request.url).origin
 
-    // NUEVO CÓDIGO
-    const host = request.headers.get("x-forwarded-host") || request.url.split("/")[2]
-    const protocol = request.headers.get("x-forwarded-proto") || "http"
-    const appBaseUrl = `${protocol}://${host}`
+    // ✅ CORRECCIÓN: Usar la variable de entorno NEXT_PUBLIC_APP_BASE_URL como prioridad
+    // Si no está definida (ej. en desarrollo local), usa new URL(request.url).origin
+    const appBaseUrl = process.env.NEXT_PUBLIC_APP_BASE_URL || new URL(request.url).origin
 
     // Modificar la callback_url en los datos antes de enviarlos a n8n
     // Asumiendo que el presupuestoId está en data.presupuestoId o data.id
