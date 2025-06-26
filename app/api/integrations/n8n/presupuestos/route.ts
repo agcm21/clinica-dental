@@ -7,6 +7,24 @@ export async function POST(request: Request) {
     console.log("=== API INTERNA: Recibiendo datos para enviar a n8n ===")
     console.log("Datos recibidos:", data)
 
+    // Construir la URL base de la aplicación Next.js dinámicamente
+    // Esto asegura que la callback_url siempre apunte al dominio correcto (local o desplegado)
+    const appBaseUrl = new URL(request.url).origin
+
+    // Modificar la callback_url en los datos antes de enviarlos a n8n
+    // Asumiendo que el presupuestoId está en data.presupuestoId o data.id
+    const presupuestoId = data.presupuestoId || data.id // Asegúrate de usar el campo correcto
+    if (presupuestoId) {
+      // Usamos 'actualizar-respuesta' como el endpoint correcto para la respuesta del cliente
+      data.callback_url = `${appBaseUrl}/api/presupuestos/actualizar-respuesta/${presupuestoId}`
+    } else {
+      console.warn("presupuestoId no encontrado en los datos, la callback_url podría ser incorrecta.")
+      // Si no hay presupuestoId, podrías optar por no enviar callback_url o usar una genérica
+      // Por ahora, la dejamos como está si no se puede construir dinámicamente
+    }
+
+    console.log("Datos a enviar a n8n (con callback_url corregida):", data)
+
     // URL del webhook de n8n (PRODUCCIÓN - URL CORRECTA)
     const n8nWebhookUrl = "https://primary-production-46d3.up.railway.app/webhook/f91dd4a3-a4c2-4b87-afee-3ec1d66a737a"
 
@@ -70,7 +88,6 @@ export async function POST(request: Request) {
 
       console.error("Error de fetch a n8n:", fetchError)
 
-      // ✅ CORRECCIÓN: Línea 74 - Eliminar fetch() incorrecto y usar fetchError
       return NextResponse.json(
         {
           error: `Error de conectividad con n8n: ${fetchError instanceof Error ? fetchError.message : "Error desconocido"}`,
@@ -82,7 +99,6 @@ export async function POST(request: Request) {
   } catch (error) {
     console.error("Error en API interna:", error)
 
-    // ✅ CORRECCIÓN: Línea 85 - Simplificar verificación duplicada
     return NextResponse.json(
       {
         error: error instanceof Error ? error.message : "Error inesperado",
@@ -92,9 +108,3 @@ export async function POST(request: Request) {
     )
   }
 }
-
-
-
-
-
-
