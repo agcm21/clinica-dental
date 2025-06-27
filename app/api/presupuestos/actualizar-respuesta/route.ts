@@ -58,8 +58,11 @@ export async function GET(request: NextRequest) {
 
     console.log("BD actualizada exitosamente:", data)
 
+    // Obtener la URL base de la aplicación desde las variables de entorno
+    const appBaseUrl = process.env.NEXT_PUBLIC_APP_BASE_URL || new URL(request.url).origin
+    console.log("Redirigiendo a URL base:", appBaseUrl)
     // Redirigir a una página de confirmación
-    return NextResponse.redirect(new URL(`/presupuestos/respuesta-confirmada?accion=${accion}`, request.url))
+    return NextResponse.redirect(new URL(`/presupuestos/respuesta-confirmada?accion=${accion}`, appBaseUrl))
   } catch (error) {
     console.error("Error en el endpoint:", error)
     return NextResponse.json({ error: "Error interno del servidor" }, { status: 500 })
@@ -137,8 +140,11 @@ export async function POST(request: NextRequest) {
 
     console.log("BD actualizada exitosamente:", data)
 
+    // Obtener la URL base de la aplicación desde las variables de entorno
+    const appBaseUrl = process.env.NEXT_PUBLIC_APP_BASE_URL || new URL(request.url).origin
+    console.log("Redirigiendo a URL base:", appBaseUrl)
     // Redirigir a una página de confirmación
-    return NextResponse.redirect(new URL(`/presupuestos/respuesta-confirmada?accion=${finalAccion}`, request.url))
+    return NextResponse.redirect(new URL(`/presupuestos/respuesta-confirmada?accion=${finalAccion}`, appBaseUrl))
   } catch (error) {
     console.error("Error en el endpoint:", error)
     return NextResponse.json({ error: "Error interno del servidor" }, { status: 500 })
