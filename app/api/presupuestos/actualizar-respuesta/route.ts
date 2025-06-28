@@ -14,6 +14,10 @@ export async function GET(request: NextRequest) {
     console.log("URL completa:", request.url)
     console.log("Parámetros recibidos:", { id, accion })
 
+    // ✅ NUEVOS LOGS PARA DIAGNOSTICAR NEXT_PUBLIC_APP_BASE_URL
+    console.log("DEBUG: process.env.NEXT_PUBLIC_APP_BASE_URL:", process.env.NEXT_PUBLIC_APP_BASE_URL)
+    console.log("DEBUG: new URL(request.url).origin:", new URL(request.url).origin)
+
     // Validar parámetros (SIN TOKEN)
     if (!id || !accion) {
       console.log("ERROR: Faltan parámetros")
@@ -60,6 +64,8 @@ export async function GET(request: NextRequest) {
 
     // Obtener la URL base de la aplicación desde las variables de entorno
     const appBaseUrl = process.env.NEXT_PUBLIC_APP_BASE_URL || new URL(request.url).origin
+    // ✅ NUEVO LOG PARA LA appBaseUrl final
+    console.log("DEBUG: Final appBaseUrl for redirection:", appBaseUrl)
     console.log("Redirigiendo a URL base:", appBaseUrl)
     // Redirigir a una página de confirmación
     return NextResponse.redirect(new URL(`/presupuestos/respuesta-confirmada?accion=${accion}`, appBaseUrl))
@@ -95,6 +101,10 @@ export async function POST(request: NextRequest) {
     console.log("Parámetros recibidos (query):", { id, accion })
     console.log("Cuerpo de la solicitud (JSON):", requestBody)
     console.log("Parámetros finales:", { finalId, finalAccion })
+
+    // ✅ NUEVOS LOGS PARA DIAGNOSTICAR NEXT_PUBLIC_APP_BASE_URL
+    console.log("DEBUG: process.env.NEXT_PUBLIC_APP_BASE_URL:", process.env.NEXT_PUBLIC_APP_BASE_URL)
+    console.log("DEBUG: new URL(request.url).origin:", new URL(request.url).origin)
 
     // Validar parámetros
     if (!finalId || !finalAccion) {
@@ -142,6 +152,8 @@ export async function POST(request: NextRequest) {
 
     // Obtener la URL base de la aplicación desde las variables de entorno
     const appBaseUrl = process.env.NEXT_PUBLIC_APP_BASE_URL || new URL(request.url).origin
+    // ✅ NUEVO LOG PARA LA appBaseUrl final
+    console.log("DEBUG: Final appBaseUrl for redirection:", appBaseUrl)
     console.log("Redirigiendo a URL base:", appBaseUrl)
     // Redirigir a una página de confirmación
     return NextResponse.redirect(new URL(`/presupuestos/respuesta-confirmada?accion=${finalAccion}`, appBaseUrl))
